@@ -10,10 +10,8 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 @SpringBootApplication
 public class BotZomboidApplication {
 
-    public static void main(String[] args) throws TelegramApiException {
-        ConfigurableApplicationContext context = SpringApplication.run(BotZomboidApplication.class, args);
-        TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-        telegramBotsApi.registerBot(context.getBean(Bot.class));
+    public static void main(String[] args) {
+        SpringApplication.run(BotZomboidApplication.class, args);
     }
 
 }
