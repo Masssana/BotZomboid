@@ -1,6 +1,8 @@
 package com.develop.project.botzomboid;
 
 import com.develop.project.botzomboid.ifaces.BotOperations;
+import com.develop.project.botzomboid.ifaces.TextSender;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -8,12 +10,29 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-@Component
+
 public class Bot extends TelegramLongPollingBot implements BotOperations {
-    @Value("${bot.token}")
-    private String token;
-    @Value("${bot.name}")
-    private String name;
+
+    private final String name;
+    private final String token;
+    private static volatile Bot instance;
+    private final TextSender textSender;
+    private final CommandsHandler commandsHandler;
+    private final StartPoll startPoll;
+
+    public Bot(@Value("${bot.token}") String token,
+               @Value("${bot.name}") String name,
+               TextSender textSender,
+               CommandsHandler commandsHandler, 
+               StartPoll startPoll) {
+        super(token);
+        this.token = token;
+        this.name = name;
+        this.textSender = textSender;
+        this.commandsHandler = commandsHandler;
+        this.startPoll = startPoll;
+        instance = this;
+    }
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -25,12 +44,17 @@ public class Bot extends TelegramLongPollingBot implements BotOperations {
 
             switch (message.getText()){
                 case "/vote":
-                    startCommandOnReceivedVote(id);
+                    commandsHandler.startCommandOnReceivedVote(id);
+                    try {
+                        startPoll.startPoll(id);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
             }
         }
 
-        sendText(id, message.getText());
+        textSender.sendText(id, message.getText());
         System.out.println(user.getFirstName() + " wrote " + message.getText());
     }
 
@@ -45,24 +69,15 @@ public class Bot extends TelegramLongPollingBot implements BotOperations {
     }
 
     @Override
-    public void sendText(Long who, String text) {
-        SendMessage sm = SendMessage.builder()
-                .chatId(who.toString())
-                .text(text).build();
-
-        trySending(sm);
+    public void execute(SendMessage sendMessage) throws TelegramApiException{
+        super.execute(sendMessage);
     }
 
-    private void startCommandOnReceivedVote(Long id){
-        String answer = "Hello, here is all commands that you can choose: " + "\n" + "/Add health to zombies, " + "\n" + "/Decrease zombies health";
-        sendText(id, answer);
-    }
-
-    private void trySending(SendMessage message) {
-        try {
-            execute(message);
-        }catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+    public static Bot getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("Bot has not been initialized yet");
         }
+        return instance;
     }
+
 }
