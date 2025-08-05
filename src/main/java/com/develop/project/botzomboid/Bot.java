@@ -1,6 +1,7 @@
 package com.develop.project.botzomboid;
 
 import com.develop.project.botzomboid.ifaces.BotOperations;
+import com.develop.project.botzomboid.ifaces.Poll;
 import com.develop.project.botzomboid.ifaces.TextSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

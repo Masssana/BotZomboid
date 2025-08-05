@@ -1,16 +1,29 @@
 package com.develop.project.botzomboid;
 
+import com.develop.project.botzomboid.ifaces.Processor;
 import com.develop.project.botzomboid.ifaces.TextSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Component
-@RequiredArgsConstructor
+
 @PropertySource("classpath:commands.properties")
 public class CommandsHandler {
     private final TextSender textSender;
+    private final Map<String, Processor> processors;
+
+    public CommandsHandler(TextSender textSender, List<Processor> processors) {
+        this.textSender = textSender;
+        this.processors = processors.stream()
+                .collect(Collectors.toMap(
+                        Processor::getType, processor -> processor));
+    }
 
     @Value("${command.one}")
     private String addPower;

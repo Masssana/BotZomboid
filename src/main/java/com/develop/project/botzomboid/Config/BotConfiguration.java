@@ -3,6 +3,7 @@ package com.develop.project.botzomboid.Config;
 import com.develop.project.botzomboid.Bot;
 import com.develop.project.botzomboid.CommandsHandler;
 import com.develop.project.botzomboid.StartPoll;
+import com.develop.project.botzomboid.ifaces.Poll;
 import com.develop.project.botzomboid.ifaces.TextSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
