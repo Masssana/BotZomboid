@@ -1,6 +1,8 @@
 package com.develop.project.botzomboid.config;
 
 import com.develop.project.botzomboid.bot.Bot;
+import com.develop.project.botzomboid.bot.keyboard.BaseKeyboard;
+import com.develop.project.botzomboid.bot.keyboard.PollKeyboard;
 import com.develop.project.botzomboid.handler.CallbackQueryHandler;
 import com.develop.project.botzomboid.handler.MessageHandler;
 import lombok.AccessLevel;
@@ -24,8 +26,8 @@ public class BotConfiguration {
     @Bean
     public Bot getBot(SetWebhook webhook,
                       MessageHandler messageHandler,
-                      CallbackQueryHandler callbackQueryHandler){
-        return new Bot(webhook, botName, botToken, messageHandler, callbackQueryHandler);
+                      CallbackQueryHandler callbackQueryHandler, PollKeyboard pollKeyboard, BaseKeyboard baseKeyboard){
+        return new Bot(webhook, botName, botToken, messageHandler, callbackQueryHandler, pollKeyboard, baseKeyboard);
     }
 
     @Bean

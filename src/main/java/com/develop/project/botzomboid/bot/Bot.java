@@ -1,5 +1,7 @@
 package com.develop.project.botzomboid.bot;
 
+import com.develop.project.botzomboid.bot.keyboard.BaseKeyboard;
+import com.develop.project.botzomboid.bot.keyboard.PollKeyboard;
 import com.develop.project.botzomboid.handler.CallbackQueryHandler;
 import com.develop.project.botzomboid.handler.MessageHandler;
 import lombok.AccessLevel;
@@ -19,13 +21,20 @@ public class Bot extends SpringWebhookBot {
 
     MessageHandler messageHandler;
     CallbackQueryHandler callbackQueryHandler;
+    PollKeyboard pollKeyboard;
+    BaseKeyboard baseKeyboard;
 
     public Bot(SetWebhook setWebhook, String botName, String botToken,
-               MessageHandler messageHandler, CallbackQueryHandler callbackQueryHandler) {
+               MessageHandler messageHandler,
+               CallbackQueryHandler callbackQueryHandler,
+               PollKeyboard pollKeyboard,
+               BaseKeyboard baseKeyboard) {
         super(setWebhook, botToken);
         this.botName = botName;
         this.messageHandler = messageHandler;
         this.callbackQueryHandler = callbackQueryHandler;
+        this.pollKeyboard = pollKeyboard;
+        this.baseKeyboard = baseKeyboard;
     }
 
     @Override
@@ -48,7 +57,14 @@ public class Bot extends SpringWebhookBot {
             return callbackQueryHandler.processCallbackQuery(callbackQuery);
         } else {
             Message message = update.getMessage();
-            if (message != null) {
+            if (message.hasText()) {
+                if("/start".equals(message.getText())) {
+                    SendMessage sendMessage = new SendMessage();
+                    sendMessage.setChatId(message.getChatId().toString());
+                    sendMessage.setText("Добро пожаловать в бот по проджект зомбоид!" + "\n" + "выберите опцию");
+                    sendMessage.setReplyMarkup(baseKeyboard.getMainMenuKeyboard());
+                    return sendMessage;
+                }
                 return messageHandler.answerMessage(update.getMessage());
             }
         }

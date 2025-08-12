@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ButtonNameEnum {
-    CREATE_VOTE_BUTTON("Голосовать!"),
-    TEST_BUTTON("Тестовая кнопка");
+    vote("Голосовать!"),
+    test("Тестовая кнопка");
 
     private final String buttonName;
 

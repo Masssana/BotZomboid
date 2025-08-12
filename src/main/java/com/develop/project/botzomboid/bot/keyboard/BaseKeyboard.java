@@ -1,7 +1,9 @@
 package com.develop.project.botzomboid.bot.keyboard;
 
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
@@ -13,8 +15,8 @@ public class BaseKeyboard {
 
     public ReplyKeyboardMarkup getMainMenuKeyboard() {
         KeyboardRow row1 = new KeyboardRow();
-        row1.add(new KeyboardButton(ButtonNameEnum.CREATE_VOTE_BUTTON.getButtonName())); //fixme рассмотреть возможность использовать KeyboardButtonPollType
-        row1.add(new KeyboardButton(ButtonNameEnum.TEST_BUTTON.getButtonName()));
+        row1.add(new KeyboardButton("/" + ButtonNameEnum.vote.name())); //fixme рассмотреть возможность использовать KeyboardButtonPollType
+        row1.add(new KeyboardButton("/" + ButtonNameEnum.test.name()));
 
         List<KeyboardRow> keyboard = new ArrayList<>();
         keyboard.add(row1);

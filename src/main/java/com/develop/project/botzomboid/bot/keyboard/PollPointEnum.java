@@ -1,12 +1,18 @@
 package com.develop.project.botzomboid.bot.keyboard;
 
+import lombok.Getter;
+
+@Getter
 public enum PollPointEnum {
 
-    HEALTH("Здоровье"),
-    SPEED("Скорось"),
-    RESPAWN("Респаун"),
-    LOOT("Количество лута");
+    HEALTH("/Health"),
+    SPEED("/Speed"),
+    RESPAWN("/Respawn"),
+    LOOT("/AmountOfLoot");
+
+    private String name;
 
     PollPointEnum(String name) {
+        this.name = name;
     }
 }
