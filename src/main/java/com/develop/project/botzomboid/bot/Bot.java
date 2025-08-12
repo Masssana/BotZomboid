@@ -30,6 +30,7 @@ public class Bot extends SpringWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        System.out.println(update);
         try {
             return handleUpdate(update);
         } catch (IllegalArgumentException e) {
